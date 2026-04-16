@@ -1,13 +1,31 @@
+import java.util.Arrays;
+
 public class TrainConsistManagementAppTest {
 
-    // Linear Search Method
-    public static boolean searchBogie(String[] bogieIds, String key) {
-        for (String id : bogieIds) {
-            if (id.equals(key)) {
-                return true;
+    // Binary Search Method
+    public static boolean binarySearchBogie(String[] bogieIds, String key) {
+
+        // Step 1: Sort the array (important)
+        Arrays.sort(bogieIds);
+
+        int low = 0;
+        int high = bogieIds.length - 1;
+
+        while (low <= high) {
+            int mid = (low + high) / 2;
+
+            int compare = key.compareTo(bogieIds[mid]);
+
+            if (compare == 0) {
+                return true; // Found
+            } else if (compare < 0) {
+                high = mid - 1; // Search left
+            } else {
+                low = mid + 1; // Search right
             }
         }
-        return false;
+
+        return false; // Not Found
     }
 
     public static void main(String[] args) {
@@ -16,7 +34,7 @@ public class TrainConsistManagementAppTest {
 
         String searchKey = "BG309";
 
-        boolean result = searchBogie(bogieIds, searchKey);
+        boolean result = binarySearchBogie(bogieIds, searchKey);
 
         if (result) {
             System.out.println("Bogie Found: " + searchKey);
