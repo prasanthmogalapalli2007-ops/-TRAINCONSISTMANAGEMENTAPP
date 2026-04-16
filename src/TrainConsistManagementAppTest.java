@@ -23,10 +23,12 @@ public class TrainConsistManagementAppTest {
         // Create list
         List<Bogie> bogieList = new ArrayList<>();
 
-        // Add bogies
+        // Add bogies (added duplicates for grouping demo)
         bogieList.add(new Bogie("Sleeper", 72));
         bogieList.add(new Bogie("AC Chair", 56));
         bogieList.add(new Bogie("First Class", 24));
+        bogieList.add(new Bogie("Sleeper", 70));
+        bogieList.add(new Bogie("AC Chair", 55));
 
         // -------- UC7: SORT --------
         bogieList.sort(Comparator.comparingInt(b -> b.capacity));
@@ -44,6 +46,18 @@ public class TrainConsistManagementAppTest {
         System.out.println("\nFiltered Bogies (capacity > 60):");
         for (Bogie b : filteredList) {
             b.display();
+        }
+
+        // -------- UC9: GROUPING --------
+        Map<String, List<Bogie>> groupedBogies = bogieList.stream()
+                .collect(Collectors.groupingBy(b -> b.name));
+
+        System.out.println("\nGrouped Bogies by Type:");
+        for (String type : groupedBogies.keySet()) {
+            System.out.println(type + ":");
+            for (Bogie b : groupedBogies.get(type)) {
+                b.display();
+            }
         }
     }
 }
