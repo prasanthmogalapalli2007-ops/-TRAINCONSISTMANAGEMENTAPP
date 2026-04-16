@@ -3,7 +3,7 @@ import java.util.stream.Collectors;
 
 public class TrainConsistManagementAppTest {
 
-    // Bogie class inside (avoids all errors)
+    // Bogie class inside
     static class Bogie {
         String name;
         int capacity;
@@ -23,7 +23,7 @@ public class TrainConsistManagementAppTest {
         // Create list
         List<Bogie> bogieList = new ArrayList<>();
 
-        // Add bogies (added duplicates for grouping demo)
+        // Add bogies
         bogieList.add(new Bogie("Sleeper", 72));
         bogieList.add(new Bogie("AC Chair", 56));
         bogieList.add(new Bogie("First Class", 24));
@@ -52,12 +52,19 @@ public class TrainConsistManagementAppTest {
         Map<String, List<Bogie>> groupedBogies = bogieList.stream()
                 .collect(Collectors.groupingBy(b -> b.name));
 
-        System.out.println("\nGrouped Bogies by Type:");
+        System.out.println("\nGrouped Bogies:");
         for (String type : groupedBogies.keySet()) {
             System.out.println(type + ":");
             for (Bogie b : groupedBogies.get(type)) {
                 b.display();
             }
         }
+
+        // -------- UC10: REDUCE (TOTAL CAPACITY) --------
+        int totalCapacity = bogieList.stream()
+                .map(b -> b.capacity)          // extract capacity
+                .reduce(0, Integer::sum);      // sum all
+
+        System.out.println("\nTotal Seating Capacity: " + totalCapacity);
     }
 }
