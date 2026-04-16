@@ -1,9 +1,10 @@
 import java.util.*;
 import java.util.stream.Collectors;
+import java.util.regex.*;
 
 public class TrainConsistManagementAppTest {
 
-    // Bogie class inside
+    // Bogie class
     static class Bogie {
         String name;
         int capacity;
@@ -19,6 +20,8 @@ public class TrainConsistManagementAppTest {
     }
 
     public static void main(String[] args) {
+
+        Scanner sc = new Scanner(System.in);
 
         // Create list
         List<Bogie> bogieList = new ArrayList<>();
@@ -60,11 +63,41 @@ public class TrainConsistManagementAppTest {
             }
         }
 
-        // -------- UC10: REDUCE (TOTAL CAPACITY) --------
+        // -------- UC10: REDUCE --------
         int totalCapacity = bogieList.stream()
-                .map(b -> b.capacity)          // extract capacity
-                .reduce(0, Integer::sum);      // sum all
+                .map(b -> b.capacity)
+                .reduce(0, Integer::sum);
 
         System.out.println("\nTotal Seating Capacity: " + totalCapacity);
+
+        // -------- UC11: REGEX VALIDATION --------
+        System.out.println("\nEnter Train ID (format TRN-1234): ");
+        String trainId = sc.nextLine();
+
+        System.out.println("Enter Cargo Code (format PET-AB): ");
+        String cargoCode = sc.nextLine();
+
+        // Define regex patterns
+        Pattern trainPattern = Pattern.compile("TRN-\\d{4}");
+        Pattern cargoPattern = Pattern.compile("PET-[A-Z]{2}");
+
+        // Match input
+        Matcher trainMatcher = trainPattern.matcher(trainId);
+        Matcher cargoMatcher = cargoPattern.matcher(cargoCode);
+
+        // Validate
+        if (trainMatcher.matches()) {
+            System.out.println("Valid Train ID");
+        } else {
+            System.out.println("Invalid Train ID");
+        }
+
+        if (cargoMatcher.matches()) {
+            System.out.println("Valid Cargo Code");
+        } else {
+            System.out.println("Invalid Cargo Code");
+        }
+
+        sc.close();
     }
 }
