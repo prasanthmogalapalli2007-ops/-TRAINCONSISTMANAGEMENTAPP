@@ -1,8 +1,8 @@
 import java.util.*;
 
-public class TrainConsistManagementApp {
+public class TrainConsistManagementAppTest {
 
-    // Bogie class (inside main class → no duplicate error)
+    // Add Bogie class here
     static class Bogie {
         String name;
         int capacity;
@@ -21,23 +21,12 @@ public class TrainConsistManagementApp {
 
         List<Bogie> bogieList = new ArrayList<>();
 
-        // Add bogies
         bogieList.add(new Bogie("Sleeper", 72));
         bogieList.add(new Bogie("AC Chair", 56));
         bogieList.add(new Bogie("First Class", 24));
 
-        // Sort ascending
         bogieList.sort(Comparator.comparingInt(b -> b.capacity));
 
-        System.out.println("Ascending Order:");
-        for (Bogie b : bogieList) {
-            b.display();
-        }
-
-        // Sort descending
-        bogieList.sort(Comparator.comparingInt((Bogie b) -> b.capacity).reversed());
-
-        System.out.println("\nDescending Order:");
         for (Bogie b : bogieList) {
             b.display();
         }
