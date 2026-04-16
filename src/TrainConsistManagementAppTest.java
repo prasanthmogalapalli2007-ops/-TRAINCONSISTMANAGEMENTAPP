@@ -2,17 +2,17 @@ import java.util.*;
 import java.util.stream.Collectors;
 import java.util.regex.*;
 
-// -------- UC14 Custom Exception --------
+// -------- UC14 Exception --------
 class InvalidCapacityException extends Exception {
-    public InvalidCapacityException(String message) {
-        super(message);
+    public InvalidCapacityException(String msg) {
+        super(msg);
     }
 }
 
 // -------- UC15 Runtime Exception --------
 class CargoSafetyException extends RuntimeException {
-    public CargoSafetyException(String message) {
-        super(message);
+    public CargoSafetyException(String msg) {
+        super(msg);
     }
 }
 
@@ -30,10 +30,6 @@ public class TrainConsistManagementAppTest {
             this.name = name;
             this.capacity = capacity;
         }
-
-        void display() {
-            System.out.println(name + " - Capacity: " + capacity);
-        }
     }
 
     // Goods Bogie
@@ -45,117 +41,55 @@ public class TrainConsistManagementAppTest {
             this.type = type;
         }
 
-        // UC15: Safe Cargo Assignment
         void assignCargo(String cargo) {
             try {
-                // Rule: Rectangular cannot carry Petroleum
                 if (type.equalsIgnoreCase("Rectangular") && cargo.equalsIgnoreCase("Petroleum")) {
                     throw new CargoSafetyException("Unsafe Cargo Assignment!");
                 }
-
                 this.cargo = cargo;
-                System.out.println("Cargo assigned successfully: " + cargo);
-
+                System.out.println("Cargo Assigned: " + cargo);
             } catch (CargoSafetyException e) {
                 System.out.println("Error: " + e.getMessage());
-
             } finally {
-                System.out.println("Cargo assignment process completed.\n");
+                System.out.println("Process Completed\n");
             }
         }
     }
 
     public static void main(String[] args) {
 
-        Scanner sc = new Scanner(System.in);
+        // -------- UC16: BUBBLE SORT --------
+        int[] capacities = {72, 56, 24, 70, 60};
 
-        List<Bogie> bogieList = new ArrayList<>();
-
-        try {
-            bogieList.add(new Bogie("Sleeper", 72));
-            bogieList.add(new Bogie("AC Chair", 56));
-            bogieList.add(new Bogie("First Class", 24));
-
-            // Invalid test
-            bogieList.add(new Bogie("Invalid", 0));
-
-        } catch (InvalidCapacityException e) {
-            System.out.println("Error: " + e.getMessage());
+        System.out.println("Before Sorting:");
+        for (int c : capacities) {
+            System.out.print(c + " ");
         }
 
-        // -------- UC7: SORT --------
-        bogieList.sort(Comparator.comparingInt(b -> b.capacity));
+        // Bubble Sort
+        for (int i = 0; i < capacities.length - 1; i++) {
+            for (int j = 0; j < capacities.length - i - 1; j++) {
 
-        // -------- UC8: FILTER --------
-        List<Bogie> filtered = bogieList.stream()
-                .filter(b -> b.capacity > 60)
-                .collect(Collectors.toList());
-
-        // -------- UC9: GROUP --------
-        Map<String, List<Bogie>> grouped = bogieList.stream()
-                .collect(Collectors.groupingBy(b -> b.name));
-
-        // -------- UC10: REDUCE --------
-        int total = bogieList.stream()
-                .map(b -> b.capacity)
-                .reduce(0, Integer::sum);
-
-        // -------- UC11: REGEX --------
-        System.out.println("Enter Train ID:");
-        String trainId = sc.nextLine();
-
-        Pattern p = Pattern.compile("TRN-\\d{4}");
-        System.out.println(p.matcher(trainId).matches() ? "Valid" : "Invalid");
-
-        // -------- UC12: SAFETY --------
-        List<GoodsBogie> goods = new ArrayList<>();
-        goods.add(new GoodsBogie("Cylindrical"));
-        goods.add(new GoodsBogie("Open"));
-
-        boolean safe = goods.stream()
-                .allMatch(g -> !g.type.equals("Cylindrical") || true);
-
-        System.out.println("Safety Check: " + (safe ? "Safe" : "Not Safe"));
-
-        // -------- UC13: PERFORMANCE --------
-        List<Bogie> bigList = new ArrayList<>();
-        try {
-            for (int i = 1; i <= 100000; i++) {
-                bigList.add(new Bogie("Sleeper", i % 100 + 1));
+                if (capacities[j] > capacities[j + 1]) {
+                    // swap
+                    int temp = capacities[j];
+                    capacities[j] = capacities[j + 1];
+                    capacities[j + 1] = temp;
+                }
             }
-        } catch (Exception e) {}
-
-        long start1 = System.nanoTime();
-        List<Bogie> loopList = new ArrayList<>();
-        for (Bogie b : bigList) {
-            if (b.capacity > 60) loopList.add(b);
         }
-        long end1 = System.nanoTime();
 
-        long start2 = System.nanoTime();
-        List<Bogie> streamList = bigList.stream()
-                .filter(b -> b.capacity > 60)
-                .collect(Collectors.toList());
-        long end2 = System.nanoTime();
+        System.out.println("\nAfter Sorting:");
+        for (int c : capacities) {
+            System.out.print(c + " ");
+        }
 
-        System.out.println("Loop Time: " + (end1 - start1));
-        System.out.println("Stream Time: " + (end2 - start2));
-
-        // -------- UC15: TRY-CATCH-FINALLY --------
-        System.out.println("\n--- UC15: Cargo Assignment ---");
-
+        // -------- UC15 DEMO --------
+        System.out.println("\n\nUC15 Demo:");
         GoodsBogie g1 = new GoodsBogie("Cylindrical");
         GoodsBogie g2 = new GoodsBogie("Rectangular");
 
-        // Safe
-        g1.assignCargo("Petroleum");
-
-        // Unsafe
-        g2.assignCargo("Petroleum");
-
-        // Program continues
-        System.out.println("Program continues safely after exception.");
-
-        sc.close();
+        g1.assignCargo("Petroleum"); // safe
+        g2.assignCargo("Petroleum"); // unsafe
     }
 }
